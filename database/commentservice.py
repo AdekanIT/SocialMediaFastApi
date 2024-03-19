@@ -3,6 +3,12 @@ from database import get_db
 from datetime import datetime
 
 
+def all_comment_db():
+    db = next(get_db())
+    comments = db.query(Comment).all()
+    return comments
+
+
 def add_comment_db(post_id, comment_text, user_id):
     db = next(get_db())
     new_comment = Comment(post_id=post_id, comment_text=comment_text, user_id=user_id, pub_date=datetime.now())
@@ -14,9 +20,9 @@ def add_comment_db(post_id, comment_text, user_id):
         return 'Action fail'
 
 
-def delete_comment_db(post_id, comment_id):
+def delete_comment_db(comment_id):
     db = next(get_db())
-    exact_comment = db.query(Comment).filter_by(post_id=post_id, comment_id=comment_id).first()
+    exact_comment = db.query(Comment).filter_by(comment_id=comment_id).first()
     if exact_comment:
         db.delete(exact_comment)
         db.commit()
